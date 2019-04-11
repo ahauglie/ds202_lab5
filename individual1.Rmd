@@ -1,0 +1,11 @@
+---
+title: "individual1"
+author: "Alicia Hauglie"
+date: "4/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
