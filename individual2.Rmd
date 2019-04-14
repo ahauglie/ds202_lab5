@@ -15,7 +15,9 @@ names(acc)
 Part one: Accident data
 Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
 ```{r}
-
+acc$DAY_WEEK
+library(ggplot2)
+ggplot(data = acc, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="light blue") + ylab("Total Accidents") + xlab("Day of the week")
 ```
 What time of the day do accidents happen (use variable HOUR)?
 ```{r}
