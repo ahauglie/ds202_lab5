@@ -16,7 +16,7 @@ Part one: Accident data
 Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
 ```{r}
 
-
+hi alicia.
 ```
 What time of the day do accidents happen (use variable HOUR)?
 ```{r}
