@@ -191,7 +191,18 @@ $(document).ready(function () {
 </div>
 
 
-
+<p>Part one: Accident data Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?</p>
+<p>What time of the day do accidents happen (use variable HOUR)?</p>
+<p>What is the number of accidents with at least one drunk driver (use variable DRUNK_DR)?</p>
+<p>Part two: Connecting data</p>
+<p>Load the person table. Identify drivers (PER_TYP == 1, see fars manual) and subset on them.</p>
+<p>Join accident and driver table (work out which variable(s) to use)</p>
+<p>Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!</p>
+<p>Part three: Connecting data and make maps</p>
+<p>Now plot a choropleth map of accidents on a county level</p>
+<p>Read the description for the STATE and COUNTY columns in the FARS manual. The state &amp; county codes are Geographic Locator Codes (GLCs) from the General Services Administration’s (GSA) publication Use readxl::read_xlsx to read in the GLCs</p>
+<p>Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.</p>
+<p>Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?</p>
 
 
 
