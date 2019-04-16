@@ -9,34 +9,43 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 acc <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/accident.csv", stringsAsFactors = FALSE)
 names(acc)
-per <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/person.csv", stringsAsFactors = FALSE)
-names(acc)
+
 ```
 **Part one: Accident data**
 Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
 ```{r}
-acc$HOUR[acc$HOUR == ] <- NA
 library(ggplot2)
-ggplot(data = acc, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="light blue") + ylab("Total Accidents") + xlab("Day of the week") + ggtitle("Total Accidents on each Given week day")
+ggplot(data = acc, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="light blue") + ylab("Total Number of Accidents") + xlab("Day of the week") + ggtitle("Total Accidents on each Given Week day") + scale_x_continuous(breaks= c(1, 2, 3, 4, 5, 6, 7), labels = c("Sunday", "Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday"))
 ```
+There are more accidents on Friday, Saturday, and Sunday. These are all considered the weekend, so the weekend works as well. 
 What time of the day do accidents happen (use variable HOUR)?
 ```{r}
 acc$HOUR[acc$HOUR == 99] <- NA
 #We have to change 99 to null in order to graph this as a per hour accident graph. 99 is the NULL hour, because the 0 hour is from midnight to 1.
-ggplot(data = acc, aes(x=HOUR)) + geom_histogram(color="black", fill="light blue") + ylab("Total Accidents") + xlab("Hour of the Day") + ggtitle("Total Accidents Per Hour on a Given Day")
+ggplot(data = acc, aes(x=HOUR)) + geom_histogram(color="Black", fill="light green") + ylab("Total Number of Accidents") + xlab("Hour of the Day") + ggtitle("Total Accidents Per Hour on a Given Day") + scale_x_continuous(breaks= c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23))
 ```
+Most accidents are during rush hour around when people get off work. The graph starts to go up tremendously around the 15th hour of the day which is 3 in the afternoon, which is the start of when people start to get off work. 
+
 What is the number of accidents with at least one drunk driver (use variable DRUNK_DR)?
 ```{r}
+ggplot(data = acc, aes(x=DRUNK_DR)) + geom_histogram(color="black", fill="lightpink3") + ylab("Total Number of Accidents") + xlab("Number of Drunk Drivers involved in the Crash") + ggtitle("Number of Drunk Drivers involved in each Accident") + scale_x_continuous(breaks= c(0, 1, 2, 3)) + stat_bin(aes(y=..count.., label=..count..), geom="text", vjust=-.5) 
+library(tidyverse)
 
+drunkDriving <- acc %>% filter(DRUNK_DR > 0)
+count(drunkDriving)
 
 ```
+As we can see, there is 8769 cases where a drunk Driver was involved in the crash. The graph shows the overall layout of the number of Drunk Drivers per crash.
 
 **Part two: Connecting data**
 
 Load the person table. Identify drivers (PER_TYP == 1, see fars manual) and subset on them.
 ```{r}
+per <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/person.csv", stringsAsFactors = FALSE)
+names(acc)
 
-
+drivers = per %>% filter(PER_TYP == 1)
+head(drivers)
 ```
 Join accident and driver table (work out which variable(s) to use)
 ```{r}
