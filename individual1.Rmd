@@ -7,63 +7,81 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+acc <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/accident.csv", stringsAsFactors = FALSE)
+names(acc)
+per <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/person.csv", stringsAsFactors = FALSE)
+names(acc)
 ```
 
-Part one: Accident data
-Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
+**PART ONE: ACCIDENT DATA**
+
+
+1. Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
 ```{r}
-
-
+library(ggplot2)
+ggplot(data = acc, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="salmon") + ylab("Total Accidents") + xlab("Day of the Week")+ scale_x_continuous(breaks=c(1, 2, 3, 4, 5, 6, 7),labels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))+ggtitle("Accidents by Day of Week")
 ```
-What time of the day do accidents happen (use variable HOUR)?
+
+Yes, most accidents seem to happen on the weekend (Friday-Sunday). This would make sense because more people are typically out and about on the weekends. 
+
+
+2. What time of the day do accidents happen (use variable HOUR)?
 ```{r}
-
-
+acc$HOUR[acc$HOUR == 99] <- NA
+ggplot(data = acc, aes(x=HOUR)) + geom_histogram(color="black", fill="lightgoldenrod2") + ylab("Number of Accidents") + xlab("Time of Day")+scale_x_continuous(breaks=c(0:23))+ggtitle("Accidents by Time of Day")
 ```
-What is the number of accidents with at least one drunk driver (use variable DRUNK_DR)?
+
+Based on the graph, we can see that most accidents happen between 4 pm and 10ish pm, which would make sense as this is the time when people are typically getting off of work, school, etc. and going home for the day. 
+(This graph does not include the data with unknown hour of accident AKA 99)
+
+3. What is the number of accidents with at least one drunk driver (use variable DRUNK_DR)?
 ```{r}
-
-
+library(tidyverse)
+drunkdriving1 <- acc %>% filter(DRUNK_DR > 0)
+count(drunkdriving1)
 ```
 
-Part two: Connecting data
+There are 8,769 accidents in this data in which there were at least 1 drunk drivers involved. 
 
-Load the person table. Identify drivers (PER_TYP == 1, see fars manual) and subset on them.
+
+
+**PART TWO: CONNECTING DATA**
+1. Load the person table. Identify drivers (PER_TYP == 1, see fars manual) and subset on them.
 ```{r}
-
-
+drivers <- per %>% filter(PER_TYP == 1)
 ```
-Join accident and driver table (work out which variable(s) to use)
+2. Join accident and driver table (work out which variable(s) to use)
 ```{r}
-
-
+acc.drivers <-  inner_join(acc, drivers, by = "ST_CASE")
 ```
-Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
+
+3. Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
 ```{r}
-
-
+acc.drivers.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX) 
+tally(acc.drivers.clean)
 ```
 
-Part three: Connecting data and make maps
+**PART THREE: CONNECTING DATA AND MAKING MAPS**
 
-Now plot a choropleth map of accidents on a county level
+1. Now plot a choropleth map of accidents on a county level
 ```{r}
 
 
 ```
 Read the description for the STATE and COUNTY columns in the FARS manual.
 The state & county codes are Geographic Locator Codes (GLCs) from the General Services Administration’s (GSA) publication
-Use readxl::read_xlsx to read in the GLCs
+2. Use readxl::read_xlsx to read in the GLCs
 ```{r}
 
 
 ```
-Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
+3. Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
 ```{r}
 
 
 ```
-Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
+4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
 
 
