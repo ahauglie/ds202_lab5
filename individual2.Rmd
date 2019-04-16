@@ -49,8 +49,8 @@ head(drivers)
 ```
 Join accident and driver table (work out which variable(s) to use)
 ```{r}
-
-
+acc.drivers <- inner_join(acc, drivers, by = c("SEX", "DAY_WEEK", "HOUR"))
+?inner_join
 ```
 Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
 ```{r}
