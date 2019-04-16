@@ -15,13 +15,13 @@ names(acc)
 **Part one: Accident data**
 Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
 ```{r}
-acc$DAY_WEEK
+acc$HOUR[acc$HOUR == ] <- NA
 library(ggplot2)
 ggplot(data = acc, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="light blue") + ylab("Total Accidents") + xlab("Day of the week") + ggtitle("Total Accidents on each Given week day")
 ```
 What time of the day do accidents happen (use variable HOUR)?
 ```{r}
-acc[acc$HOUR == 99] <- NA
+acc$HOUR[acc$HOUR == 99] <- NA
 #We have to change 99 to null in order to graph this as a per hour accident graph. 99 is the NULL hour, because the 0 hour is from midnight to 1.
 ggplot(data = acc, aes(x=HOUR)) + geom_histogram(color="black", fill="light blue") + ylab("Total Accidents") + xlab("Hour of the Day") + ggtitle("Total Accidents Per Hour on a Given Day")
 ```
