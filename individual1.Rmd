@@ -58,7 +58,7 @@ acc.drivers <-  inner_join(acc, drivers, by = "ST_CASE")
 
 3. Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
 ```{r}
-acc.drivers.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX) 
+acc.drivers.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX)
 tally(acc.drivers.clean)
 ```
 
@@ -72,19 +72,25 @@ library("readxl")
 CountyData <- read_excel("County Codes United States.xlsx")
 county <- map_data("county")
 ggplot(county, aes(x=long, y = lat)) + geom_polygon(aes(group=group))
+acc.drivers.clean$`County Code` <- acc.drivers.clean$COUNTY.x
+library(dplyr)
+CountyData$`County Code` <- as.numeric(CountyData$`County Code`)
+acc.drivers.clean <- acc.drivers.clean %>% select(`County Code`, LONGITUD, LATITUDE, DAY_WEEK, HOUR.x, SEX)
+CountyData <- CountyData %>% select(`County Code`, `County Name`)
+firstJoin <- inner_join(acc.drivers.clean, CountyData, by = "County Code")
 
-acc.drivers$County <- acc.drivers$County
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=acc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.001, color="firebrick2")
 ```
 Read the description for the STATE and COUNTY columns in the FARS manual.
 The state & county codes are Geographic Locator Codes (GLCs) from the General Services Administration’s (GSA) publication
 2. Use readxl::read_xlsx to read in the GLCs
 ```{r}
-
+GLC <- read_xlsx("FRPP GLC United States.xlsx")
 ```
 3. Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
 ```{r}
-
-
+inner_join(GLC, acc, )
+View(GLC)
 ```
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
