@@ -89,8 +89,18 @@ GLC <- read_xlsx("FRPP GLC United States.xlsx")
 ```
 3. Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
 ```{r}
-inner_join(GLC, acc, )
-View(GLC)
+?mutate
+acc <- mutate(acc, `County Code` = COUNTY)
+acc$COUNTY <- as.numeric(acc$COUNTY)
+acc$`County Code` <- as.numeric(acc$`County Code`)
+GLC$`County Code` <- as.numeric(GLC$`County Code`)
+acc.glc <- inner_join(GLC, acc, by = "County Code")
+
+nacc <- acc %>% group_by(STATE) %>% summarize(n=n())
+
+n.acc.glc <- acc.glc %>% group_by(`County Code`) %>% summarize(n=n())
+head(n.acc.glc)
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=n.acc.glc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.02, color="white")
 ```
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
