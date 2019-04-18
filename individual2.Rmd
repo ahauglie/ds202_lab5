@@ -77,12 +77,11 @@ county <- map_data("county")
 
 ggplot(county, aes(x=long, y=lat)) +geom_polygon(aes(group=group)) + geom_point(aes(x=LONGITUD, y=LATITUDE), data=acc %>% filter(LONGITUD < 0, LATITUDE > -130), size=0.001, color='white')
 
- ```
+```
 Read the description for the STATE and COUNTY columns in the FARS manual.
 The state & county codes are Geographic Locator Codes (GLCs) from the General Services Administration’s (GSA) publication
 Use readxl::read_xlsx to read in the GLCs
 ```{r}
-
 
 ```
 Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
