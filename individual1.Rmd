@@ -89,7 +89,6 @@ GLC <- read_xlsx("FRPP GLC United States.xlsx")
 ```
 3. Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
 ```{r}
-acc <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/accident.csv", stringsAsFactors = FALSE)
 glc.us<-readxl::read_xlsx("FRPP GLC United States.xlsx")
 glc.terr<-readxl::read_xlsx("FRPP GLC US Territories.xlsx")
 
@@ -98,34 +97,20 @@ glc.us<-glc.us[-1,]
 colnames(glc.terr)<-glc.terr[1,]
 glc.terr<-glc.terr[-1,]
 
-county<-data.frame(code=as.numeric(glc.us$`County Code`), name=glc.us$`County Name`)
-head(county)
-unique(county[county$name=="BOONE",])
-
-View(glc.us)
-View(glc.terr)
-View(acc)
-
-acc <- mutate(acc, `County Code` = COUNTY)
-joined.glc<- inner_join(glc.us, glc.terr, by = "County Code")
-joined.glc
-three_join <- inner_join(joined.glc, acc, by = "County Code")
-```
-
-```{r}
-?mutate
 acc <- mutate(acc, `County Code` = COUNTY)
 acc$COUNTY <- as.numeric(acc$COUNTY)
 acc$`County Code` <- as.numeric(acc$`County Code`)
-GLC$`County Code` <- as.numeric(GLC$`County Code`)
-acc.glc <- inner_join(GLC, acc, by = "County Code")
+joined.glc<- inner_join(glc.us, glc.terr, by = "County Code")
+joined.glc$`County Code` <- as.numeric(joined.glc$`County Code`)
+three_join <- inner_join(joined.glc, acc, by = "County Code")
+?select
+?filter
+filtered_three_join <- select(three_join, 
 
-nacc <- acc %>% group_by(STATE) %>% summarize(n=n())
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.001, color="firebrick2")
 
-n.acc.glc <- acc.glc %>% group_by(`County Code`) %>% summarize(n=n())
-head(n.acc.glc)
-ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=n.acc.glc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.02, color="white")
 ```
+
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
 
