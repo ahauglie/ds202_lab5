@@ -54,7 +54,10 @@ acc.drivers <- inner_join(acc, drivers, by= "ST_CASE")
 Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
 ```{r}
 acc.driver.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX)
-tally(acc.driver.clean)
+tallied <- tally(acc.driver.clean)
+tallied$SEX <- as.character(tallied$SEX)
+tallied
+ggplot(tallied, aes(fill = SEX, x = HOUR.x)) + geom_bar() + facet_wrap(~DAY_WEEK)
 ```
 
 **Part three: Connecting data and make maps**
