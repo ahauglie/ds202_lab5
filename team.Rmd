@@ -37,20 +37,23 @@ As we can see, there is 8769 cases where a drunk Driver was involved in the cras
 
 Part two: Connecting data
 
-Load the person table. Identify drivers (PER_TYP == 1, see fars manual) and subset on them.
+1. Load the person table. Identify drivers (PER_TYP == 1, see fars manual) and subset on them.
 ```{r}
-
-
+drivers <- per %>% filter(PER_TYP == 1)
 ```
-Join accident and driver table (work out which variable(s) to use)
+2. Join accident and driver table (work out which variable(s) to use)
 ```{r}
-
-
+acc.drivers <-  inner_join(acc, drivers, by = "ST_CASE")
 ```
-Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
+
+3. Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
 ```{r}
-
-
+acc.drivers.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX)
+tally(acc.drivers.clean)
+#Throw a chart in here
+ggplot(data = acc.drivers.clean, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="light blue") + ylab("Total Number of Accidents") + xlab("Day of the week") + ggtitle("Total Accidents on each Given Week day")
+#
+###USE DISTINCT TO TRIM IT DOWN
 ```
 
 
