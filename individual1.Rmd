@@ -113,7 +113,8 @@ This graph looks a bit wonky because it shows the territory data as well (see th
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
 
-ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="darkolive3")+facet_wrap(~MONTH)
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="darkolivegreen3")+facet_wrap(~MONTH)
 
 ```
 
+This shows that there tends to be more accidents in the north in the colder months, winter and spring. It seems to show winter as the more dangerous time of year, presumably because the larger chance of icy conditions. 
