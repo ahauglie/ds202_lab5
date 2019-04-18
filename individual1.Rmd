@@ -103,16 +103,17 @@ acc$`County Code` <- as.numeric(acc$`County Code`)
 joined.glc<- inner_join(glc.us, glc.terr, by = "County Code")
 joined.glc$`County Code` <- as.numeric(joined.glc$`County Code`)
 three_join <- inner_join(joined.glc, acc, by = "County Code")
-?select
-?filter
-filtered_three_join <- select(three_join, 
-
-ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.001, color="firebrick2")
+filtered_three_join <- select(three_join, `County Code`, LATITUDE, LONGITUD, COUNTY, DAY, MONTH, YEAR, HOUR, ST_CASE)
+filtered_three_join
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join, size=0.0001, color="cornflowerblue")
 
 ```
+This graph looks a bit wonky because it shows the territory data as well (see the above graph for just the lower 48), but this shows the number of accidents in each US county.  
 
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
 
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="darkolive3")+facet_wrap(~MONTH)
 
 ```
+
