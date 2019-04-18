@@ -83,11 +83,26 @@ Read the description for the STATE and COUNTY columns in the FARS manual.
 The state & county codes are Geographic Locator Codes (GLCs) from the General Services Administration’s (GSA) publication
 Use readxl::read_xlsx to read in the GLCs
 ```{r}
-
+GLC <- read_xlsx("FRPP GLC United States.xlsx")
 ```
 Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
 ```{r}
+glc.us<-readxl::read_xlsx("FRPP GLC United States.xlsx")
+glc.terr<-readxl::read_xlsx("FRPP GLC US Territories.xlsx")
 
+colnames(glc.us)<-glc.us[1,]
+glc.us<-glc.us[-1,]
+colnames(glc.terr)<-glc.terr[1,]
+glc.terr<-glc.terr[-1,]
+
+county<-data.frame(code=as.numeric(glc.us$`County Code`), name=glc.us$`County Name`)
+head(county)
+unique(county[county$name=="BOONE",])
+
+acc <- mutate(acc, `County Code` = COUNTY)
+joined.glc<- inner_join(glc.us, glc.terr, by = "County Code")
+joined.glc
+three_join <- inner_join(joined.glc, acc, by = "County Code")
 
 ```
 Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
