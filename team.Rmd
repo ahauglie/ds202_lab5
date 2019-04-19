@@ -50,9 +50,11 @@ acc.drivers <-  inner_join(acc, drivers, by = "ST_CASE")
 ```{r}
 acc.drivers.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX)
 tally(acc.drivers.clean)
-#Throw a chart in here
-ggplot(data = acc.drivers.clean, aes(x=DAY_WEEK)) + geom_histogram(color="black", fill="light blue") + ylab("Total Number of Accidents") + xlab("Day of the week") + ggtitle("Total Accidents on each Given Week day")
-#
+hello <- ggplot(data = acc.drivers.clean, aes(x=HOUR.x, fill=factor(SEX))) + geom_histogram() + ylab("Total Number of Accidents") + xlab("Hour of the Day") + ggtitle("Total Accidents on Each Given Day of the Week")+scale_x_continuous(limits=c(0,24), breaks=c(0, 2, 4, 6, 8, 10, 12,14, 16, 20, 24))+facet_wrap(~DAY_WEEK)
+
+hello + scale_fill_discrete(name="Gender",
+                         breaks=c("1", "2", "8", "9"),
+                         labels=c("Male", "Female", "Not Reported", "Unknown"), h=c(250,360))
 ###USE DISTINCT TO TRIM IT DOWN
 ```
 
