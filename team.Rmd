@@ -106,6 +106,7 @@ joined.glc<- inner_join(glc.us, glc.terr, by = "County Code")
 joined.glc$`County Code` <- as.numeric(joined.glc$`County Code`)
 three_join <- inner_join(joined.glc, acc, by = "County Code")
 filtered_three_join <- select(three_join, `County Code`, LATITUDE, LONGITUD, COUNTY, DAY, MONTH, YEAR, HOUR, ST_CASE)
+<<<<<<< HEAD
 filtered_three_join <- distinct(filtered_three_join, ST_CASE, .keep_all = TRUE)
 
 
@@ -114,10 +115,15 @@ ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes
 #I can't figure out how to get the joined three data on the map, it keeps showing no data for the west
 ggplot(filtered_three_join, aes(x=LONGITUD, y=LATITUDE))+geom_polygon()+geom_point(aes(x=LONGITUD, y=LATITUDE), data=acc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.01, color="cornflowerblue")+ggtitle("Accidents by County")
 
+=======
+filtered_three_join
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join, size=0.0001, color="cornflowerblue")
+>>>>>>> 278d7737524224e6d37b740b057f21223b009164
 
 ```
 Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
+<<<<<<< HEAD
 ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=filtered_three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.01, color="darkolivegreen3")+facet_wrap(~MONTH)
 
 ```
@@ -125,3 +131,7 @@ ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes
 This shows that there tends to be more accidents in the north in the colder months, winter and spring. It seems to show winter as the more dangerous time of year, presumably because the larger chance of icy conditions. 
 
 #I had it showing more points before but then I messed it up and can't get it back LOL great
+=======
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="darkolivegreen3")+facet_wrap(~MONTH)
+```
+>>>>>>> 278d7737524224e6d37b740b057f21223b009164

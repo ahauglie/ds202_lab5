@@ -98,7 +98,7 @@ joined.glc$`County Code` <- as.numeric(joined.glc$`County Code`)
 three_join <- inner_join(joined.glc, acc, by = "County Code")
 filtered_three_join <- select(three_join, `County Code`, LATITUDE, LONGITUD, COUNTY, DAY, MONTH, YEAR, HOUR, ST_CASE)
 filtered_three_join
-#ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join, size=0.0001, color="white")
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join, size=0.0001, color="white")
 
 
 
@@ -106,7 +106,7 @@ filtered_three_join
 Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
 
-#ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="white")+facet_wrap(~MONTH)
-
-
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="white")+facet_wrap(~MONTH)
 ```
+
+This graph shows that during the winter there are more accidents, which makes a lot of sense, because of ice and poor road conditions.
