@@ -118,7 +118,6 @@ This graph looks a bit wonky because it shows the territory data as well (see th
 
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
-
 ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="darkolivegreen3")+facet_wrap(~MONTH)
 
 ```
