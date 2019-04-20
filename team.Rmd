@@ -54,8 +54,7 @@ hello <- ggplot(data = acc.drivers.clean, aes(x=HOUR.x, fill=factor(SEX))) + geo
 
 hello + scale_fill_discrete(name="Gender",
                          breaks=c("1", "2", "8", "9"),
-                         labels=c("Male", "Female", "Not Reported", "Unknown"), h=c(250,360))
-###USE DISTINCT TO TRIM IT DOWN
+                         labels=c("Male", "Female", "Not Reported", "Unknown"), h=c(250,360))\
 ```
 
 
@@ -83,6 +82,7 @@ The state & county codes are Geographic Locator Codes (GLCs) from the General Se
 2. Use readxl::read_xlsx to read in the GLCs
 ```{r}
 GLC <- read_xlsx("FRPP GLC United States.xlsx")
+###USE DISTINCT TO TRIM IT DOWN
 ```
 Visualize the number of accidents in each county using a choropleth map. To do this, you need to join the accident data, GLCs, and appropriate map data.
 ```{r}
