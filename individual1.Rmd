@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 acc <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/accident.csv", stringsAsFactors = FALSE)
 names(acc)
 per <- read.csv("https://raw.githubusercontent.com/xdaiISU/ds202materials/master/hwlabs/fars2017/person.csv", stringsAsFactors = FALSE)
-names(acc)
+names(per)
 ```
 
 **PART ONE: ACCIDENT DATA**
@@ -60,8 +60,7 @@ acc.drivers <-  inner_join(acc, drivers, by = "ST_CASE")
 ```{r}
 acc.drivers.clean <- acc.drivers %>% group_by(DAY_WEEK, HOUR.x, SEX)
 tally(acc.drivers.clean)
-hello <- ggplot(data = acc.drivers.clean, aes(x=HOUR.x, fill=factor(SEX))) + geom_histogram() + ylab("Total Number of Accidents") + xlab("Hour of the Day") + ggtitle("Total Accidents on Each Given Day of the Week")+scale_x_continuous(limits=c(0,24), breaks=c(0, 2, 4, 6, 8, 10, 12,14, 16, 20, 24))+facet_wrap(~DAY_WEEK)
-
+hello <- ggplot(data = acc.drivers.clean, aes(x=HOUR.x, fill=factor(SEX))) + geom_histogram() + ylab("Total Number of Accidents") + xlab("Hour of the Day") + ggtitle("Total Accidents on Each Given Day of the Week")+scale_x_continuous(limits=c(0,24), breaks=c(0, 2, 4, 6, 8, 10,12, 14, 16,18, 20, 22, 24))+facet_wrap(~DAY_WEEK)
 hello + scale_fill_discrete(name="Gender",
                          breaks=c("1", "2", "8", "9"),
                          labels=c("Male", "Female", "Not Reported", "Unknown"), h=c(250,360))
@@ -85,7 +84,7 @@ acc.drivers.clean <- acc.drivers.clean %>% select(`County Code`, LONGITUD, LATIT
 CountyData <- CountyData %>% select(`County Code`, `County Name`)
 firstJoin <- inner_join(acc.drivers.clean, CountyData, by = "County Code")
 
-ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=acc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.001, color="firebrick2")
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=acc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.001, color="firebrick2")+ggtitle("Accidents by County")
 ```
 Read the description for the STATE and COUNTY columns in the FARS manual.
 The state & county codes are Geographic Locator Codes (GLCs) from the General Services Administration’s (GSA) publication
@@ -110,17 +109,24 @@ joined.glc<- inner_join(glc.us, glc.terr, by = "County Code")
 joined.glc$`County Code` <- as.numeric(joined.glc$`County Code`)
 three_join <- inner_join(joined.glc, acc, by = "County Code")
 filtered_three_join <- select(three_join, `County Code`, LATITUDE, LONGITUD, COUNTY, DAY, MONTH, YEAR, HOUR, ST_CASE)
-filtered_three_join
-ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join, size=0.0001, color="cornflowerblue")
+filtered_three_join <- distinct(filtered_three_join, ST_CASE, .keep_all = TRUE)
+
+
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=filtered_three_join %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.01, color="cornflowerblue")+ggtitle("Accidents by County")
+#The above one looks more correct but
+#I can't figure out how to get the joined three data on the map, it keeps showing no data for the west
+ggplot(filtered_three_join, aes(x=LONGITUD, y=LATITUDE))+geom_polygon()+geom_point(aes(x=LONGITUD, y=LATITUDE), data=acc %>% filter(LONGITUD <0 & LONGITUD> -130), size=0.01, color="cornflowerblue")+ggtitle("Accidents by County")
 
 ```
-This graph looks a bit wonky because it shows the territory data as well (see the above graph for just the lower 48), but this shows the number of accidents in each US county.  
+This first graph looks a bit wonky because it shows the territory data as well (see the above and below graphs for just the lower 48), but this shows the number of accidents in each US county.  
 
 4. Can you find seasonal trends in accident occurrences in different states? Is summer or winter more dangerous? Why?
 ```{r}
 
-ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.0001, color="darkolivegreen3")+facet_wrap(~MONTH)
+ggplot(county, aes(x=long, y=lat))+geom_polygon(aes(group=group))+geom_point(aes(x=LONGITUD, y=LATITUDE), data=filtered_three_join  %>% filter(LONGITUD <0 & LONGITUD > -130), size=0.01, color="darkolivegreen3")+facet_wrap(~MONTH)
 
 ```
 
 This shows that there tends to be more accidents in the north in the colder months, winter and spring. It seems to show winter as the more dangerous time of year, presumably because the larger chance of icy conditions. 
+
+#I had it showing more points before but then I messed it up and can't get it back LOL great
